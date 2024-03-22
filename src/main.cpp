@@ -31,7 +31,7 @@ bool list_show_input(WINDOW* t_win, std::vector<std::string>& t_items, std::vect
             wattron(t_win, A_REVERSE);
         mvwprintw(t_win, i + 1, 2, "[%ld] %s, %.2lf CZK", i, 
             t_items[i].c_str(), t_prices[i]);
-        wattroff(t_win, A_REVERSE);
+        wattroff(t_win, A_REVERSE); 
     }
 
     l_leave = false;
@@ -79,27 +79,27 @@ void input_item(WINDOW* t_win, std::vector<std::string>& t_items, std::vector<do
         else mvwprintw(t_win, t_win_max.y - 5, 2, "Please, input the price of your item!");
         if(l_times == 0)
             wattron(t_win, A_REVERSE);
-        mvwprintw(t_win, t_win_max.y - 4, 2, "INPUT: %s", l_string.c_str());
+        mvwprintw(t_win, t_win_max.y - 4, 2, "Name: %s", l_string.c_str());
         wattroff(t_win, A_REVERSE);
 
         if(l_times == 1)
             wattron(t_win, A_REVERSE);
-        mvwprintw(t_win, t_win_max.y - 3, 2, "PRICE: %s", l_price_str.c_str());
+        mvwprintw(t_win, t_win_max.y - 3, 2, "Price: %s", l_price_str.c_str());
         wattroff(t_win, A_REVERSE);
 
         if(l_key == KEY_BACKSPACE || l_key == KEY_DC || l_key == 127) {
             mvwprintw(t_win, t_win_max.y - 2, 2, 
-                "KEY: <backspace>, VALUE: %d", l_key);
+                "Key: <backspace>, Value: %d", l_key);
         } else if(l_key == '\n') {
             mvwprintw(t_win, t_win_max.y - 2, 2, 
-                "KEY: <enter>, VALUE: %d", l_key);
+                "Key: <enter>, Value: %d", l_key);
         } else {
             mvwprintw(t_win, t_win_max.y - 2, 2, 
-                "KEY: %c, VALUE: %d", l_key, l_key);
+                "Key: %c, Value: %d", l_key, l_key);
         }
 
         l_key = wgetch(t_win); 
-        if(l_key == 'e') return;
+        if(l_key == 'e' && l_string.empty()) return;
         if(l_key != '\n') {
             if(l_key == KEY_BACKSPACE || l_key == KEY_DC || l_key == 127) {
                 if(!l_string.empty() && l_times == 0) 
@@ -145,7 +145,7 @@ void show_total(WINDOW* t_win, std::vector<double>& t_prices, vec2& t_max) {
     for(auto p : t_prices) {
         l_sum += p;
     }
-    mvwprintw(t_win, t_max.y - 2, 2, "Total = %.2lf", l_sum);
+    mvwprintw(t_win, t_max.y - 2, 2, "Total = %.2lf CZK", l_sum);
 }
 
 int main() {
@@ -193,9 +193,11 @@ int main() {
         box(list_win, 0, 0);
 
         if(key == '\n') {
-            mvwprintw(input_win, max_input.y - 2, max_input.x - 25, "KEY: <enter>, VALUE: %d", key);
+            mvwprintw(input_win, max_input.y - 2, max_input.x - 25, "Key: <enter>, Value: %d", key);
+        } else if(key == 0) {
+            mvwprintw(input_win, max_input.y - 2, max_input.x - 25, "Key: <null>, Value: %d", key);
         } else {
-            mvwprintw(input_win, max_input.y - 2, max_input.x - 25, "KEY: %c, VALUE: %d", key, key);
+            mvwprintw(input_win, max_input.y - 2, max_input.x - 25, "Key: %c, Value: %d", key, key);
         }
         
         for(int i = 0; i < 3; ++i) {
@@ -252,7 +254,6 @@ int main() {
         (void) char_temp;
     }
 
-    
     endwin();
     return 0;
 }
